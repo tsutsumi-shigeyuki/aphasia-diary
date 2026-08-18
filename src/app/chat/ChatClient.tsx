@@ -85,7 +85,7 @@ export default function ChatPage() {
       {mode === "photo" && !photo && (
         <section className="photo-start">
           <Camera size={62}/><h2>写真を選んでください</h2>
-          <label className="primary-button">写真を選ぶ<input hidden type="file" accept="image/*" capture="environment" onChange={(e)=>onPhoto(e.target.files?.[0])}/></label>
+          <label className="primary-button">写真を選ぶ<input hidden type="file" accept="image/*" onChange={(e)=>onPhoto(e.target.files?.[0])}/></label>
         </section>
       )}
 
