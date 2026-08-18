@@ -1,0 +1,40 @@
+*{box-sizing:border-box}html,body{margin:0;background:#f5f7f8;color:#16375f;font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif}button,input,textarea{font:inherit}.phone-shell{max-width:480px;min-height:100dvh;margin:0 auto;background:#fff;padding:24px 20px 40px}.topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px}.topbar h1{margin:0;font-size:28px}.sub{margin:0 0 4px;color:#76879a}.icon-link,.back{border:0;background:none;color:#16375f;text-decoration:none;font-size:28px}.home-actions{display:grid;grid-template-columns:1fr 1fr;gap:14px}.home-action{height:130px;border-radius:22px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;color:#fff;text-decoration:none;font-size:20px;font-weight:700}.blue{background:#4c9feb}.green{background:#64b875}.orange{background:#f4a13c}.purple{background:#7b78d8}.section-title{margin-top:28px}.diary-card,.empty-card,.settings-card,.note-card,.draft-card{border:1px solid #e3e8ed;border-radius:18px;padding:16px;margin-bottom:14px;background:#fff;box-shadow:0 4px 14px rgba(20,50,80,.06)}.diary-card{display:flex;gap:14px}.diary-card img{width:82px;height:82px;object-fit:cover;border-radius:12px}.diary-card p{margin:6px 0 0;line-height:1.6}.settings-card h2,.draft-card h2{margin-top:0}.settings-card p,.note-card p{color:#63758a;line-height:1.6}.switch-row{display:flex;justify-content:space-between;align-items:center;margin-top:18px;font-size:18px;font-weight:700}.switch-row input{width:26px;height:26px}.photo-start{text-align:center;padding:70px 10px}.primary-button{display:inline-flex;justify-content:center;align-items:center;border:0;background:#2f87df;color:#fff;padding:16px 24px;border-radius:16px;font-weight:700;text-decoration:none}.full{width:100%;margin-top:14px}.chat-photo{width:100%;max-height:230px;object-fit:cover;border-radius:18px;margin-bottom:18px}.chat-list{display:flex;flex-direction:column;gap:12px;padding-bottom:210px}.bubble{max-width:88%;padding:13px 15px;border-radius:18px;line-height:1.55}.bubble p{margin:0}.assistant{align-self:flex-start;background:#eef4fb}.user{align-self:flex-end;background:#e4f5e7}.choice-wrap{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}.choice-wrap button{min-height:48px;border:1px solid #89b5e7;background:#fff;border-radius:12px;color:#16375f}.chat-controls{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:min(480px,100%);background:rgba(255,255,255,.98);border-top:1px solid #e2e7ec;padding:12px 20px max(16px,env(safe-area-inset-bottom))}.input-row{display:flex;gap:8px}.input-row input{flex:1;min-height:48px;border:1px solid #d7dfe7;border-radius:12px;padding:0 14px}.send-button{width:48px;border:0;border-radius:12px;background:#2f87df;color:#fff}.voice-row{margin-top:8px}.voice-button{display:flex;gap:8px;align-items:center;justify-content:center;border:1px solid #77ba82;background:#eff9f0;color:#2d7440;border-radius:12px;padding:12px 16px}.voice-button.recording{border-color:#d86b6b;background:#fff0f0;color:#a43535}.draft-button{width:100%;margin-top:10px;padding:14px;border:2px solid #ee9c38;background:#fff8ef;color:#a85d10;border-radius:14px;font-weight:700}.draft-button:disabled{opacity:.5}.final-editor{width:100%;min-height:220px;border:2px solid #cfdbe8;border-radius:16px;padding:16px;font-size:18px;line-height:1.7;resize:vertical}.draft-card p{white-space:pre-wrap;line-height:1.7}
+.with-nav{padding-bottom:110px}.bottom-nav{position:fixed;left:50%;bottom:0;transform:translateX(-50%);z-index:20;width:min(480px,100%);display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid #dfe6ec;background:rgba(255,255,255,.97);backdrop-filter:blur(10px);padding:8px 6px max(10px,env(safe-area-inset-bottom))}.nav-item{min-height:58px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;color:#7a8795;text-decoration:none;font-size:12px;font-weight:700}.nav-item.active{color:#2f87df}.calendar-card{border:1px solid #e3e8ed;border-radius:20px;padding:16px;background:#fff;box-shadow:0 4px 14px rgba(20,50,80,.06)}.calendar-head{display:flex;align-items:center;justify-content:space-between;font-size:18px;margin-bottom:10px}.calendar-head button{width:42px;height:42px;border:1px solid #dde5ec;border-radius:12px;background:#fff;color:#16375f}.week-row,.calendar-grid{display:grid;grid-template-columns:repeat(7,1fr)}.week-row span{text-align:center;padding:8px 0;color:#718093;font-size:13px}.calendar-day{position:relative;min-height:50px;display:flex;justify-content:center;align-items:center;border-top:1px solid #eef1f4}.diary-dot{position:absolute;bottom:5px;width:7px;height:7px;border-radius:50%;background:#3d91e3}.calendar-list{margin-top:24px}.support-grid{display:flex;flex-direction:column;gap:12px}.support-card{display:flex;align-items:flex-start;gap:14px;border:1px solid #e3e8ed;border-radius:18px;padding:18px;background:#fff;color:#16375f;text-decoration:none;box-shadow:0 4px 14px rgba(20,50,80,.05)}.support-card svg{flex:0 0 auto;color:#2f87df}.support-card div{display:flex;flex-direction:column;gap:5px}.support-card strong{font-size:18px}.support-card span{color:#63758a;line-height:1.5}.profile-card{text-align:center;border:1px solid #e3e8ed;border-radius:20px;padding:28px 18px;margin-bottom:16px;background:#fff}.avatar{width:76px;height:76px;margin:0 auto 12px;display:flex;align-items:center;justify-content:center;border-radius:50%;background:#edf5ff;color:#2f87df;font-size:26px;font-weight:800}.profile-card h2{margin:8px 0}.profile-card p{color:#63758a;line-height:1.6}
+
+.diary-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+
+  padding: 14px;
+
+  border: 1px solid #dfe7ef;
+  border-radius: 18px;
+
+  background: #fff;
+}
+
+.diary-card-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.delete-button {
+  flex: 0 0 auto;
+
+  align-self: flex-start;
+
+  min-width: 64px;
+  height: 42px;
+
+  padding: 0 14px;
+
+  border: 1px solid #dc2626;
+  border-radius: 10px;
+
+  background: #fff;
+  color: #dc2626;
+
+  font-weight: 700;
+  font-size: 15px;
+}
