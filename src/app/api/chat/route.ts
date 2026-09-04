@@ -412,9 +412,10 @@ choicesは必ず空配列にしてください。
     });
   }
 
-  const response = await client.responses.create({
+  const stream = await client.responses.create({
     model,
     input,
+    stream: true,
     text: {
       format: {
         type: "json_schema",
@@ -442,20 +443,42 @@ choicesは必ず空配列にしてください。
     },
   });
 
-  let result = {
-    message: "もう少し教えてください。",
-    choices: [] as string[],
-  };
+  const encoder = new TextEncoder();
+  const readable = new ReadableStream({
+    async start(controller) {
+      let output = "";
+      const send = (event: object) => controller.enqueue(encoder.encode(`data: ${JSON.stringify(event)}\n\n`));
 
-  try {
-    result = JSON.parse(response.output_text);
-  } catch (error) {
-    console.error("Failed to parse OpenAI response:", error);
-  }
+      try {
+        send({ type: "status", message: "考えています" });
+        for await (const event of stream as any) {
+          if (event.type === "response.output_text.delta") {
+            output += event.delta;
+            send({ type: "delta", text: event.delta });
+          }
+        }
 
-  if (!showChoices) {
-    result.choices = [];
-  }
+        let result = { message: "もう少し教えてください。", choices: [] as string[] };
+        try {
+          result = JSON.parse(output);
+        } catch (error) {
+          console.error("Failed to parse OpenAI response:", error);
+        }
+        if (!showChoices) result.choices = [];
+        send({ type: "result", data: result });
+      } catch {
+        send({ type: "error", message: "回答を受け取れませんでした。もう一度お試しください。" });
+      } finally {
+        controller.close();
+      }
+    },
+  });
 
-  return Response.json(result);
+  return new Response(readable, {
+    headers: {
+      "Content-Type": "text/event-stream; charset=utf-8",
+      "Cache-Control": "no-cache, no-transform",
+      Connection: "keep-alive",
+    },
+  });
 }
