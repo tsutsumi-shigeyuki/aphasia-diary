@@ -13,6 +13,6 @@ export function loadSettings(): AppSettings {
   }
 }
 
-export function saveSettings(settings: AppSettings) {
-  localStorage.setItem(KEY, JSON.stringify(settings));
+export function saveSettings(settings: Partial<AppSettings>) {
+  localStorage.setItem(KEY, JSON.stringify({ ...loadSettings(), ...settings }));
 }

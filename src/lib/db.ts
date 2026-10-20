@@ -1,5 +1,5 @@
 import Dexie, { type Table } from "dexie";
-import type { ChatMessage } from "./types";
+import type { ChatMessage, DiaryBackground } from "./types";
 
 export type DiaryEntry = {
   id?: number;
@@ -8,6 +8,7 @@ export type DiaryEntry = {
   conversation: ChatMessage[];
   draftText: string;
   finalText: string;
+  background?: DiaryBackground;
 };
 
 class DiaryDB extends Dexie {

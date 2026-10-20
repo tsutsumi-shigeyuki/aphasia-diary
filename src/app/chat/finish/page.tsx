@@ -4,7 +4,8 @@ import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Mic, Square } from "lucide-react";
 import { db } from "@/lib/db";
-import type { ChatMessage } from "@/lib/types";
+import type { ChatMessage, DiaryBackground } from "@/lib/types";
+import DiaryBackgroundPicker from "@/components/DiaryBackgroundPicker";
 
 export default function FinishPage() {
   const router = useRouter();
@@ -12,6 +13,7 @@ export default function FinishPage() {
   const [finalText, setFinalText] = useState("");
   const [photo, setPhoto] = useState<string>();
   const [messages, setMessages] = useState<ChatMessage[]>([]);
+  const [background, setBackground] = useState<DiaryBackground>("paper");
   const [recording, setRecording] = useState(false);
   const recorder = useRef<MediaRecorder | null>(null);
   const chunks = useRef<Blob[]>([]);
@@ -39,7 +41,14 @@ export default function FinishPage() {
   function stopVoice(){ recorder.current?.stop(); setRecording(false); }
 
   async function save() {
-    await db.diaries.add({ createdAt: new Date().toISOString(), photoDataUrl: photo, conversation: messages, draftText: draft, finalText });
+    await db.diaries.add({
+      createdAt: new Date().toISOString(),
+      photoDataUrl: photo,
+      conversation: messages,
+      draftText: draft,
+      finalText,
+      background,
+    });
     sessionStorage.removeItem("diaryDraft"); router.push("/");
   }
 
@@ -48,6 +57,10 @@ export default function FinishPage() {
       <header className="topbar"><button className="back" onClick={()=>router.back()}>←</button><h1>日記を仕上げる</h1><span/></header>
       {photo && <img className="chat-photo" src={photo} alt="日記の写真"/>}
       <div className="draft-card"><h2>AIが作ったひな型</h2><p>{draft}</p></div>
+      <section className="settings-card">
+        <h2>この日記の背景</h2>
+        <DiaryBackgroundPicker value={background} onChange={setBackground} label="この日記の背景" />
+      </section>
       <h2>自分の言葉で追記・修正</h2>
       <textarea className="final-editor" value={finalText} onChange={(e)=>setFinalText(e.target.value)} />
       <button className={recording ? "voice-button recording full" : "voice-button full"} onClick={recording ? stopVoice : startVoice}>

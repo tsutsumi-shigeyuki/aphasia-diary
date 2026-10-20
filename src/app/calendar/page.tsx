@@ -3,6 +3,8 @@
 import { useEffect, useMemo, useState } from "react";
 import BottomNav from "@/components/BottomNav";
 import { db, type DiaryEntry } from "@/lib/db";
+import DiaryBackgroundPicker from "@/components/DiaryBackgroundPicker";
+import type { DiaryBackground } from "@/lib/types";
 
 export default function CalendarPage() {
   const [items, setItems] = useState<DiaryEntry[]>([]);
@@ -12,6 +14,12 @@ export default function CalendarPage() {
   useEffect(() => {
     db.diaries.orderBy("createdAt").reverse().toArray().then(setItems);
   }, []);
+
+  const changeDiaryBackground = async (id: number | undefined, background: DiaryBackground) => {
+    if (id === undefined) return;
+    await db.diaries.update(id, { background });
+    setItems((current) => current.map((item) => item.id === id ? { ...item, background } : item));
+  };
 
   const year = cursor.getFullYear();
   const month = cursor.getMonth();
@@ -77,9 +85,17 @@ export default function CalendarPage() {
           const d = new Date(item.createdAt);
           return d.getFullYear() === year && d.getMonth() === month;
         }).map(item => (
-          <article className="diary-card" key={item.id}>
+          <article className={`diary-card diary-background-${item.background ?? "paper"}`} key={item.id}>
             {item.photoDataUrl && <img src={item.photoDataUrl} alt="日記の写真" />}
-            <div><small>{new Date(item.createdAt).toLocaleDateString("ja-JP")}</small><p>{item.finalText}</p></div>
+            <div className="diary-card-body">
+              <small>{new Date(item.createdAt).toLocaleDateString("ja-JP")}</small>
+              <p>{item.finalText}</p>
+              <DiaryBackgroundPicker
+                value={item.background ?? "paper"}
+                onChange={(background) => changeDiaryBackground(item.id, background)}
+                label="この日記の背景"
+              />
+            </div>
           </article>
         ))}
       </section>

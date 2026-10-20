@@ -31,7 +31,7 @@ export default function ChatPage() {
   async function requestChat(body: object, baseMessages: ChatMessage[]) {
     setMessages(baseMessages);
     setStreamingText("");
-    const res = await fetch("/api/chat", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
+    const res = await fetch("/api/chat", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ ...body, prompt: loadSettings().chatPrompt }) });
     if (!res.body) throw new Error("ストリームを受信できませんでした。");
 
     const reader = res.body.getReader();
@@ -115,7 +115,8 @@ export default function ChatPage() {
 
   async function makeDraft() {
     setBusy(true);
-    const res = await fetch("/api/draft", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ messages, photoDataUrl: photo }) });
+    const { draftPrompt } = loadSettings();
+    const res = await fetch("/api/draft", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ messages, photoDataUrl: photo, prompt: draftPrompt }) });
     const data = await res.json();
     sessionStorage.setItem("diaryDraft", JSON.stringify({ messages, photo, draftText: data.draftText }));
     setBusy(false); router.push("/chat/finish");

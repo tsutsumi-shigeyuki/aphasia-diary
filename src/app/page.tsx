@@ -6,6 +6,8 @@ import { useEffect, useState } from "react";
 import { db, type DiaryEntry } from "@/lib/db";
 import BottomNav from "@/components/BottomNav";
 import { Trash2 } from "lucide-react";
+import DiaryBackgroundPicker from "@/components/DiaryBackgroundPicker";
+import type { DiaryBackground } from "@/lib/types";
 
 export default function HomePage() {
   const [items, setItems] = useState<DiaryEntry[]>([]);
@@ -13,6 +15,12 @@ export default function HomePage() {
   useEffect(() => {
     db.diaries.orderBy("createdAt").reverse().limit(5).toArray().then(setItems);
   }, []);
+
+  const changeDiaryBackground = async (id: number | undefined, background: DiaryBackground) => {
+    if (id === undefined) return;
+    await db.diaries.update(id, { background });
+    setItems((current) => current.map((item) => item.id === id ? { ...item, background } : item));
+  };
 
   const deleteDiary = async (id?: number) => {
     if (!id) return;
@@ -49,11 +57,16 @@ export default function HomePage() {
         <div className="section-title"><h2>最近の日記</h2></div>
         {items.length === 0 && <div className="empty-card">まだ日記がありません。</div>}
         {items.map((item) => (
-          <article className="diary-card" key={item.id}>
+          <article className={`diary-card diary-background-${item.background ?? "paper"}`} key={item.id}>
             {item.photoDataUrl && <img src={item.photoDataUrl} alt="日記の写真"/>}
-            <div>
+            <div className="diary-card-body">
               <small>{new Date(item.createdAt).toLocaleDateString("ja-JP")}</small>
               <p>{item.finalText}</p>
+              <DiaryBackgroundPicker
+                value={item.background ?? "paper"}
+                onChange={(background) => changeDiaryBackground(item.id, background)}
+                label="この日記の背景"
+              />
             </div>
             <button className="delete-button" onClick={() => deleteDiary(item.id)}><Trash2 size={20} /></button>
           </article>

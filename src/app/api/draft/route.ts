@@ -5,9 +5,20 @@ const client = new OpenAI({
 });
 
 export async function POST(req: Request) {
-  const { messages = [] } = await req.json();
+  const { messages = [], prompt } = await req.json();
 
   const model = process.env.OPENAI_MODEL || "gpt-5-mini";
+  const customPrompt =
+    typeof prompt === "string" && prompt.trim().length > 0
+      ? prompt.trim()
+      : undefined;
+
+  if (customPrompt && customPrompt.length > 20000) {
+    return Response.json(
+      { error: "プロンプトは20,000文字以内で入力してください。" },
+      { status: 400 }
+    );
+  }
 
   const transcript = messages
     .map(
@@ -16,7 +27,7 @@ export async function POST(req: Request) {
     )
     .join("\n");
 
-  const system = `
+  const defaultSystem = `
 あなたは、失語症のある成人向けアプリの「記録下書き作成アシスタント」です。
 
 利用者とAIとの会話をもとに、
@@ -151,6 +162,7 @@ AIの判断で前向きな表現に変えてはいけません。
 文章の美しさよりも、
 本人が実際に伝えた内容に忠実であることを優先してください。
 `;
+  const system = customPrompt ?? defaultSystem;
 
   const response = await client.responses.create({
     model,

@@ -9,11 +9,23 @@ export async function POST(req: Request) {
     messages = [],
     photoDataUrl,
     showChoices = true,
+    prompt,
   } = await req.json();
 
   const model = process.env.OPENAI_MODEL || "gpt-5-mini";
+  const customPrompt =
+    typeof prompt === "string" && prompt.trim().length > 0
+      ? prompt.trim()
+      : undefined;
 
-  const system = `
+  if (customPrompt && customPrompt.length > 20000) {
+    return Response.json(
+      { error: "プロンプトは20,000文字以内で入力してください。" },
+      { status: 400 }
+    );
+  }
+
+  const defaultSystem = `
 あなたは、失語症のある成人のための「経験共有支援アシスタント」です。
 
 【目的】
@@ -291,6 +303,7 @@ AIから勝手に会話終了を宣言してはいけません。
 messageは短く、
 成人向けの自然で分かりやすい日本語にしてください。
 `;
+  const system = customPrompt ?? defaultSystem;
 
   const input: any[] = [
     {
