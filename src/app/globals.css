@@ -106,3 +106,24 @@
 .diary-card.diary-background-mint { background: linear-gradient(135deg, #f2fff8, #d9f5e8); }
 .diary-card.diary-background-lemon { background: linear-gradient(135deg, #fffdf0, #fff1bd); }
 .diary-card.diary-background-sky { background: linear-gradient(135deg, #f2f9ff, #dceeff); }
+
+.diary-card.has-illustration { background-repeat: no-repeat; background-position: center; background-size: cover; }
+.diary-card.has-illustration .diary-card-body { padding: 10px; border-radius: 12px; background: rgba(255,255,255,.9); }
+.diary-background-preview { display: flex; min-height: 110px; align-items: center; justify-content: center; padding: 16px; border-radius: 14px; background-position: center; background-size: cover; }
+.diary-background-preview p { margin: 0; padding: 12px 16px; border-radius: 10px; background: rgba(255,255,255,.88); line-height: 1.6; }
+.illustration-search { margin-top: 12px; }
+.illustration-search-toggle { padding: 8px 0; border: 0; background: transparent; color: #2f87df; font-weight: 700; cursor: pointer; }
+.illustration-search-panel { margin-top: 8px; padding: 12px; border: 1px solid #e3e8ed; border-radius: 12px; background: rgba(255,255,255,.94); }
+.illustration-search-panel > p:first-child { margin-top: 0; color: #63758a; font-size: 13px; line-height: 1.55; }
+.reference-photo-picker { display: flex; flex-direction: column; gap: 8px; margin: 10px 0; font-weight: 700; }
+.reference-photo-picker input { max-width: 100%; font-size: 14px; }
+.reference-photo-preview { display: block; max-width: 100%; max-height: 130px; margin: 10px 0; border-radius: 10px; object-fit: contain; }
+.search-query { color: #63758a; font-size: 13px; }
+.illustration-search-error { color: #a43535; font-size: 14px; }
+.illustration-results { display: grid; gap: 10px; margin-top: 12px; }
+.illustration-result { display: flex; gap: 10px; padding: 10px; border: 1px solid #e3e8ed; border-radius: 10px; }
+.illustration-result > img { width: 92px; min-height: 76px; align-self: flex-start; border-radius: 8px; object-fit: cover; }
+.illustration-result-info { display: flex; min-width: 0; flex-direction: column; align-items: flex-start; gap: 5px; font-size: 13px; overflow-wrap: anywhere; }
+.illustration-result-info a,.background-credit a { color: #246eb2; }
+.illustration-result-info .prompt-reset { margin-top: 4px; }
+.background-credit { margin: 10px 0 0; color: #526579; font-size: 12px; line-height: 1.5; overflow-wrap: anywhere; }

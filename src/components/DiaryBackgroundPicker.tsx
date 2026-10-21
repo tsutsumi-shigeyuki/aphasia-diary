@@ -18,25 +18,31 @@ type DiaryBackgroundPickerProps = {
   value: DiaryBackground;
   onChange: (value: DiaryBackground) => void;
   label?: string;
+  hasIllustration?: boolean;
 };
 
 export default function DiaryBackgroundPicker({
   value,
   onChange,
   label = "背景",
+  hasIllustration = false,
 }: DiaryBackgroundPickerProps) {
+  const backgrounds = hasIllustration
+    ? [...DIARY_BACKGROUNDS, { value: "illustration" as const, label: "選んだイラスト" }]
+    : DIARY_BACKGROUNDS;
+
   return (
     <label className="diary-background-picker">
       <span>{label}</span>
       <select
         value={value}
         onChange={(event) => {
-          const background = DIARY_BACKGROUNDS.find((option) => option.value === event.target.value);
+          const background = backgrounds.find((option) => option.value === event.target.value);
           if (background) onChange(background.value);
         }}
         aria-label={label}
       >
-        {DIARY_BACKGROUNDS.map((background) => (
+        {backgrounds.map((background) => (
           <option key={background.value} value={background.value}>
             {background.label}
           </option>

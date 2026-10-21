@@ -13,7 +13,17 @@ export type DiaryBackground =
   | "flower"
   | "dots"
   | "gingham"
-  | "stripe";
+  | "stripe"
+  | "illustration";
+
+export type DiaryBackgroundCredit = {
+  title: string;
+  creator: string;
+  license: string;
+  licenseVersion: string;
+  licenseUrl: string;
+  sourceUrl: string;
+};
 
 export type AppSettings = {
   showChoices: boolean;

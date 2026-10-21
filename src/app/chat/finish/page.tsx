@@ -4,8 +4,9 @@ import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Mic, Square } from "lucide-react";
 import { db } from "@/lib/db";
-import type { ChatMessage, DiaryBackground } from "@/lib/types";
+import type { ChatMessage, DiaryBackground, DiaryBackgroundCredit } from "@/lib/types";
 import DiaryBackgroundPicker from "@/components/DiaryBackgroundPicker";
+import IllustrationBackgroundSearch from "@/components/IllustrationBackgroundSearch";
 
 export default function FinishPage() {
   const router = useRouter();
@@ -14,6 +15,8 @@ export default function FinishPage() {
   const [photo, setPhoto] = useState<string>();
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [background, setBackground] = useState<DiaryBackground>("paper");
+  const [backgroundImageDataUrl, setBackgroundImageDataUrl] = useState<string>();
+  const [backgroundCredit, setBackgroundCredit] = useState<DiaryBackgroundCredit>();
   const [recording, setRecording] = useState(false);
   const recorder = useRef<MediaRecorder | null>(null);
   const chunks = useRef<Blob[]>([]);
@@ -48,6 +51,8 @@ export default function FinishPage() {
       draftText: draft,
       finalText,
       background,
+      backgroundImageDataUrl,
+      backgroundCredit,
     });
     sessionStorage.removeItem("diaryDraft"); router.push("/");
   }
@@ -59,7 +64,35 @@ export default function FinishPage() {
       <div className="draft-card"><h2>AIが作ったひな型</h2><p>{draft}</p></div>
       <section className="settings-card">
         <h2>この日記の背景</h2>
-        <DiaryBackgroundPicker value={background} onChange={setBackground} label="この日記の背景" />
+        <div
+          className={`diary-background-preview ${backgroundImageDataUrl && background === "illustration" ? "has-illustration" : ""} diary-background-${background}`}
+          style={backgroundImageDataUrl && background === "illustration" ? { backgroundImage: `url("${backgroundImageDataUrl}")` } : undefined}
+        >
+          <p>今日の出来事を、あなたの言葉で残します。</p>
+        </div>
+        <DiaryBackgroundPicker
+          value={background}
+          onChange={setBackground}
+          label="この日記の背景"
+          hasIllustration={Boolean(backgroundImageDataUrl)}
+        />
+        {backgroundCredit && background === "illustration" && (
+          <p className="background-credit">
+            背景素材: <a href={backgroundCredit.sourceUrl} target="_blank" rel="noreferrer">{backgroundCredit.title}</a>
+            {" "}・{backgroundCredit.creator} ・
+            <a href={backgroundCredit.licenseUrl} target="_blank" rel="noreferrer">
+              {backgroundCredit.license.toUpperCase()} {backgroundCredit.licenseVersion}
+            </a>
+          </p>
+        )}
+        <IllustrationBackgroundSearch
+          photoDataUrl={photo}
+          onSelect={(image, credit) => {
+            setBackground("illustration");
+            setBackgroundImageDataUrl(image);
+            setBackgroundCredit(credit);
+          }}
+        />
       </section>
       <h2>自分の言葉で追記・修正</h2>
       <textarea className="final-editor" value={finalText} onChange={(e)=>setFinalText(e.target.value)} />

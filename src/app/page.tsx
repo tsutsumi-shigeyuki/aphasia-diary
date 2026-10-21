@@ -7,7 +7,8 @@ import { db, type DiaryEntry } from "@/lib/db";
 import BottomNav from "@/components/BottomNav";
 import { Trash2 } from "lucide-react";
 import DiaryBackgroundPicker from "@/components/DiaryBackgroundPicker";
-import type { DiaryBackground } from "@/lib/types";
+import IllustrationBackgroundSearch from "@/components/IllustrationBackgroundSearch";
+import type { DiaryBackground, DiaryBackgroundCredit } from "@/lib/types";
 
 export default function HomePage() {
   const [items, setItems] = useState<DiaryEntry[]>([]);
@@ -16,11 +17,17 @@ export default function HomePage() {
     db.diaries.orderBy("createdAt").reverse().limit(5).toArray().then(setItems);
   }, []);
 
-  const changeDiaryBackground = async (id: number | undefined, background: DiaryBackground) => {
+  const updateDiaryBackground = async (
+    id: number | undefined,
+    updates: Partial<Pick<DiaryEntry, "background" | "backgroundImageDataUrl" | "backgroundCredit">>,
+  ) => {
     if (id === undefined) return;
-    await db.diaries.update(id, { background });
-    setItems((current) => current.map((item) => item.id === id ? { ...item, background } : item));
+    await db.diaries.update(id, updates);
+    setItems((current) => current.map((item) => item.id === id ? { ...item, ...updates } : item));
   };
+
+  const selectIllustration = (id: number | undefined, image: string, credit: DiaryBackgroundCredit) =>
+    updateDiaryBackground(id, { background: "illustration", backgroundImageDataUrl: image, backgroundCredit: credit });
 
   const deleteDiary = async (id?: number) => {
     if (!id) return;
@@ -57,15 +64,33 @@ export default function HomePage() {
         <div className="section-title"><h2>最近の日記</h2></div>
         {items.length === 0 && <div className="empty-card">まだ日記がありません。</div>}
         {items.map((item) => (
-          <article className={`diary-card diary-background-${item.background ?? "paper"}`} key={item.id}>
+          <article
+            className={`diary-card diary-background-${item.background ?? "paper"} ${item.background === "illustration" && item.backgroundImageDataUrl ? "has-illustration" : ""}`}
+            key={item.id}
+            style={item.background === "illustration" && item.backgroundImageDataUrl ? { backgroundImage: `url("${item.backgroundImageDataUrl}")` } : undefined}
+          >
             {item.photoDataUrl && <img src={item.photoDataUrl} alt="日記の写真"/>}
             <div className="diary-card-body">
               <small>{new Date(item.createdAt).toLocaleDateString("ja-JP")}</small>
               <p>{item.finalText}</p>
               <DiaryBackgroundPicker
                 value={item.background ?? "paper"}
-                onChange={(background) => changeDiaryBackground(item.id, background)}
+                onChange={(background) => updateDiaryBackground(item.id, { background })}
                 label="この日記の背景"
+                hasIllustration={Boolean(item.backgroundImageDataUrl)}
+              />
+              {item.background === "illustration" && item.backgroundCredit && (
+                <p className="background-credit">
+                  背景素材: <a href={item.backgroundCredit.sourceUrl} target="_blank" rel="noreferrer">{item.backgroundCredit.title}</a>
+                  {" "}・{item.backgroundCredit.creator} ・
+                  <a href={item.backgroundCredit.licenseUrl} target="_blank" rel="noreferrer">
+                    {item.backgroundCredit.license.toUpperCase()} {item.backgroundCredit.licenseVersion}
+                  </a>
+                </p>
+              )}
+              <IllustrationBackgroundSearch
+                photoDataUrl={item.photoDataUrl}
+                onSelect={(image, credit) => selectIllustration(item.id, image, credit)}
               />
             </div>
             <button className="delete-button" onClick={() => deleteDiary(item.id)}><Trash2 size={20} /></button>
